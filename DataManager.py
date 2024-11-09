@@ -8,6 +8,7 @@ EXCEL_FILE_PATH = os.path.join(BASE_DIR, "timetable-workbook.xlsx")
 JSON_FILE_PATH = os.path.join(BASE_DIR, "output.json")
 
 SHEETS = ["S1", "S2", "S3", "S4", "S5", "S6"]
+print("Opening excel file for reading.")
 workbook_reader = pandas.read_excel(EXCEL_FILE_PATH, sheet_name=SHEETS, skiprows=[0, 2])
 
 SECTION_TYPES = {
@@ -18,6 +19,7 @@ SECTION_TYPES = {
 
 data = []
 
+print("\nParsing through different sheets.\n")
 for sheet_name in SHEETS:
     sheet_df = workbook_reader[sheet_name]
 
@@ -102,8 +104,14 @@ for sheet_name in SHEETS:
             section_data["instructors"].append(row["instructor"])
 
     course_data["sections"].append(section_data)
+    print(f"Data of the course \'{course_data['course_title']}\' obtained succesfully... ")
     data.append(course_data)
 
+print("\nData of the courses obtained succesfully!")
+
+print("\nWriting the data obtained to 'output.json' file.")
 # dumping the data into the file
 with open(JSON_FILE_PATH, "w") as output_f:
     json.dump(data, output_f, indent=4)
+
+print("Data stored succesfully!")
